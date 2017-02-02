@@ -1,0 +1,96 @@
+#!/bin/bash
+
+export EDITOR=nvim
+
+export NVM_DIR="$HOME/.nvm"
+
+source $(brew --prefix nvm)/nvm.sh
+
+export CDATA_REPOS="$HOME/repositories"
+export CDATA_SETUP="$CDATA_REPOS/setup"
+
+export REPOS_GOOGLE="$CDATA_REPOS/google"
+export REPOS_POLYMER_ELEMENTS="$REPOS_GOOGLE/polymerelements"
+export REPOS_POLYMER_LABS="$REPOS_GOOGLE/polymerlabs"
+export REPOS_POLYMER="$REPOS_GOOGLE/polymer"
+export REPOS_PERSONAL="$CDATA_REPOS/personal"
+
+export BASH_IT=$HOME/.bash_it
+export BASH_IT_THEME='cdata'
+
+export GOPATH="$CDATA_REPOS/go"
+
+export PATH=$PATH:$HOME/.npm-packages/bin
+export PATH=$PATH:node_modules/.bin:$HOME/repositories/go/bin
+export PATH=$PATH:/usr/local/sbin
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$HOME/.cargo/bin
+
+# If not running interactively, we are done:
+[ -z "$PS1" ] && return
+
+# Personal aliases
+alias setup="cd $CDATA_SETUP"
+alias update="sh $CDATA_SETUP/setup.sh update"
+
+alias repos="cd $CDATA_REPOS"
+alias pe="cd $REPOS_POLYMER_ELEMENTS"
+alias pl="cd $REPOS_POLYMER_LABS"
+alias p="cd $REPOS_POLYMER"
+alias g="cd $REPOS_GOOGLE"
+alias togo="cd $GOPATH"
+alias cdata="cd $REPOS_PERSONAL"
+
+alias ll='ls -alFG'
+alias la='ls -AG'
+alias l='ls -CFG'
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# enable color support in tmux
+alias tmux='TERM=xterm-256color tmux'
+
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoredups:ignorespace
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=10000
+HISTFILESIZE=5000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# Load Bash It
+#source $BASH_IT/bash_it.sh
+#source $BASH_IT/completion/available/git.completion.bash
+
+# Bash prompt variables for OSX
+completion_files=( \
+  /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash \
+  /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh \
+  /usr/local/git/current/share/git-core/git-completion.sh \
+  /usr/local/git/current/share/git-core/git-prompt.sh \
+  /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc \
+  /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc
+)
+
+for completion_file in "${completion_files[@]}"; do
+  if [ -f $completion_file ]; then
+    source $completion_file
+  fi
+done
+
+#source ''
