@@ -6,7 +6,10 @@ clone () {
 	echo "Cloning $repo to $destination..."
 
 	mkdir -p $destination
+
+  set +e
 	git clone $repo $destination
+  set -e
 }
 
 backup () {
@@ -74,7 +77,7 @@ install_common_base () {
 
 	set +e
 
-	pip3 install neovim
+	pip3 install --upgrade neovim
 
 	set -e
 }

@@ -14,11 +14,17 @@ Plug 'vim-syntastic/syntastic'
 Plug 'pangloss/vim-javascript'
 Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'morhetz/gruvbox'
 
 call plug#end()
 
 syntax enable
 filetype plugin indent on
+
+" Set the color scheme
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+set background=dark
+colorscheme gruvbox
 
 " Fixes backspace on the terminal
 set backspace=2
