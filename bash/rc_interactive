@@ -4,7 +4,12 @@ export EDITOR=nvim
 
 export NVM_DIR="$HOME/.nvm"
 
-source $(brew --prefix nvm)/nvm.sh
+if [[ -n "`which brew`" ]]; then
+  nvmShell=$(brew --prefix nvm)/nvm.sh
+  if [[ -e $nvmShell ]]; then
+    source $nvmShell
+  fi
+fi
 
 export CDATA_REPOS="$HOME/repositories"
 export CDATA_SETUP="$CDATA_REPOS/setup"
@@ -15,9 +20,6 @@ export REPOS_POLYMER_LABS="$REPOS_GOOGLE/polymerlabs"
 export REPOS_POLYMER="$REPOS_GOOGLE/polymer"
 export REPOS_PERSONAL="$CDATA_REPOS/personal"
 
-export BASH_IT=$HOME/.bash_it
-export BASH_IT_THEME='cdata'
-
 export GOPATH="$CDATA_REPOS/go"
 
 export PATH=$PATH:$HOME/.npm-packages/bin
@@ -26,8 +28,6 @@ export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/.cargo/bin
 
-# If not running interactively, we are done:
-[ -z "$PS1" ] && return
 
 # Personal aliases
 alias setup="cd $CDATA_SETUP"
@@ -66,16 +66,12 @@ HISTCONTROL=ignoredups:ignorespace
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=10000
-HISTFILESIZE=5000
+HISTSIZE=50000
+HISTFILESIZE=50000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
-
-# Load Bash It
-#source $BASH_IT/bash_it.sh
-#source $BASH_IT/completion/available/git.completion.bash
 
 # Bash prompt variables for OSX
 completion_files=( \
@@ -93,4 +89,7 @@ for completion_file in "${completion_files[@]}"; do
   fi
 done
 
-#source ''
+export GIT_PS1_SHOWDIRTYSTATE=1
+
+export PS1="\[\e[0;30m\] ᛝ \[\e[1;34m\]\u\[\e[0;30m\]@\[\e[1;30m\]\h\[\e[0;30m\]:\[\e[1;36m\]\W\[\e[1;32m\]\$(__git_ps1)\[\e[0;30m\] ᚦ \[\e[0m\]"
+
