@@ -45,6 +45,7 @@ install_osx_base () {
 	echo "Installing base packages for an OSX system..."
 
 	set +e
+
 	`which xcode-select` --install
 	`which ruby` -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
@@ -57,6 +58,7 @@ install_osx_base () {
 	brew install caskroom/cask/spectacle
 	brew install caskroom/fonts/font-hack
 	brew linkapps
+
 	set -e
 }
 

@@ -41,6 +41,9 @@ alias g="cd $REPOS_GOOGLE"
 alias togo="cd $GOPATH"
 alias cdata="cd $REPOS_PERSONAL"
 
+alias vim='nvim'
+alias vi='nvim'
+
 alias ll='ls -alFG'
 alias la='ls -AG'
 alias l='ls -CFG'

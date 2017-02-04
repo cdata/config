@@ -8,6 +8,7 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'terryma/vim-multiple-cursors'
+Plug 'ntpeters/vim-better-whitespace'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-syntastic/syntastic'
@@ -56,6 +57,10 @@ set lbr
 " Hide the annoying omnicomplete preview window
 "set completeopt-=preview
 
+" Syntastic config
+let g:syntastic_html_checkers = []
+"let g:syntastic_html_htmlhint_args = "--rules doctype-first=false"
+
 " Ctrl+P config
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn)|node_modules|bower_components$',
@@ -68,11 +73,6 @@ let mapleader=","
 " Deoplete config
 let g:deoplete#enable_at_startup = 1
 
-" Highlight trailing whitespace
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
+" Better Whitespace config
+autocmd BufEnter * EnableStripWhitespaceOnSave
 
