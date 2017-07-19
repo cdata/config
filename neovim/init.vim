@@ -6,16 +6,20 @@ call plug#begin()
 
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'terryma/vim-multiple-cursors'
+"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-syntastic/syntastic'
+"Plug 'othree/html5.vim'
 Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
 Plug 'rust-lang/rust.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'morhetz/gruvbox'
+Plug 'tomlion/vim-solidity'
+Plug 'tikhomirov/vim-glsl'
 
 call plug#end()
 
@@ -44,6 +48,10 @@ set smartindent
 set tabstop=2
 set shiftwidth=2
 set expandtab
+
+" Visibly display tab/eol characters
+set list
+set listchars=tab:▸\ ,eol:¬
 
 " Add row / columnn information
 set ruler
@@ -76,3 +84,6 @@ let g:deoplete#enable_at_startup = 1
 " Better Whitespace config
 autocmd BufEnter * EnableStripWhitespaceOnSave
 
+" Fully re-highlight file when necessary. This is supposedly slow, but it is
+" definitely more accurate
+autocmd BufEnter * :syntax sync fromstart
