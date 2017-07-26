@@ -49,6 +49,9 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
+" Enable mouse in all modes
+set mouse=a
+
 " Visibly display tab/eol characters
 set list
 set listchars=tab:▸\ ,eol:¬
