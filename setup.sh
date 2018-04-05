@@ -69,7 +69,7 @@ install_debian_base () {
 
 	sudo apt-get -yq update
 	sudo apt-get -yq upgrade
-	sudo apt-get -yq install git build-essential openssh-server neovim tmux python3
+	sudo apt-get -yq install git build-essential openssh-server neovim tmux python3 python3-pip curl
 
 	set -e
 }
