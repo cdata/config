@@ -80,6 +80,7 @@ shopt -s checkwinsize
 completion_files=( \
   /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash \
   /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh \
+  /usr/local/opt/git/etc/bash_completion.d/git-prompt.sh \
   /usr/local/git/current/share/git-core/git-completion.sh \
   /usr/local/git/current/share/git-core/git-prompt.sh \
   /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc \
