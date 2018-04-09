@@ -77,12 +77,14 @@ HISTFILESIZE=50000
 shopt -s checkwinsize
 
 # Bash prompt variables for OSX
+# Previously used, but possibly not needed:
+#  /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash \
+#  /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh \
+#  /usr/local/git/current/share/git-core/git-completion.sh \
+#  /usr/local/git/current/share/git-core/git-prompt.sh \
 completion_files=( \
-  /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash \
-  /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh \
+  /usr/local/etc/bash_completion \
   /usr/local/opt/git/etc/bash_completion.d/git-prompt.sh \
-  /usr/local/git/current/share/git-core/git-completion.sh \
-  /usr/local/git/current/share/git-core/git-prompt.sh \
   /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc \
   /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc
 )
