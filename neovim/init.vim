@@ -23,8 +23,6 @@ Plug 'airblade/vim-gitgutter'
 
 " JavaScript & TypeScript
 Plug 'pangloss/vim-javascript'
-Plug 'Quramy/tsuquyomi' " tsserver integration
-Plug 'mhartington/nvim-typescript' " deoplete completion
 Plug 'leafgarland/typescript-vim' " syntax files
 Plug 'Quramy/vim-js-pretty-template'
 

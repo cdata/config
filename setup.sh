@@ -55,7 +55,8 @@ install_osx_base () {
   brew install nvm
   brew install python3
   brew install clang-format
-  brew install bash-completion
+  # Slow:
+  #brew install bash-completion
 
   brew tap caskroom/fonts
   brew cask install font-hack-nerd-font-mono
@@ -66,7 +67,6 @@ install_osx_base () {
   brew install caskroom/cask/licecap
   brew install caskroom/cask/flux
   brew install caskroom/cask/keycastr
-  brew install caskroom/fonts/font-hack
   brew linkapps
 
   set +e
