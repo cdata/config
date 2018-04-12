@@ -26,6 +26,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim' " syntax files
 Plug 'Quramy/vim-js-pretty-template'
+Plug 'Quramy/tsuquyomi'
 
 " HTML
 "Plug 'othree/html5.vim'
@@ -127,12 +128,12 @@ let g:ctrlp_use_caching = 0
 
 " TypeScript config
 " Syntastic will handle error reporting (see below)
-"let g:tsuquyomi_disable_quickfix = 1
+let g:tsuquyomi_disable_quickfix = 1
 
 " Syntastic config
 let g:syntastic_html_checkers = []
 "let g:syntastic_html_htmlhint_args = "--rules doctype-first=false"
-"let g:syntastic_typescript_checkers = ['tsuquyomi']
+let g:syntastic_typescript_checkers = ['tsuquyomi']
 
 let g:syntastic_always_populate_loc_list = 1
 " Automatically open/close error window
@@ -176,5 +177,6 @@ autocmd BufEnter * :syntax sync fromstart
 nmap <leader>n :NERDTreeToggle<CR>
 nmap <leader>m :NERDTreeFind<CR>
 nmap <leader>s :SyntasticCheck<CR>
-" search/replace word under cursor
+nmap <leader>S :SyntasticReset<CR>
+" Search/replace word under cursor
 nmap <leader>z :%s/\<<C-r><C-w>\>//g<left><left>
