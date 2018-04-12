@@ -4,6 +4,7 @@ endif
 
 call plug#begin()
 
+" QOL
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'morhetz/gruvbox'
 Plug 'terryma/vim-multiple-cursors'
@@ -48,6 +49,9 @@ call plug#end()
 syntax enable
 filetype plugin indent on
 
+" Always use the system clipboard in neovim
+set clipboard=unnamedplus
+
 " Higher frequency for things like gitgutter
 set updatetime=75
 
@@ -74,6 +78,15 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 
+" Show vertical lines at these comma-separated columns
+set colorcolumn=80
+
+" Make the current line more obvious
+set cursorline
+
+" minimum lines to keep above/below cursor
+set scrolloff=5
+
 " Enable mouse in all modes
 set mouse=a
 
@@ -89,9 +102,6 @@ set hls
 
 " Wrap text instead of being on one line
 set lbr
-
-" Hide the annoying omnicomplete preview window
-"set completeopt-=preview
 
 " Special style config for clang-format
 let g:clang_format#style_options = {
@@ -109,14 +119,34 @@ let g:clang_format#style_options = {
 " Auto-enable clang-format for relevant filetypes
 autocmd FileType javascript,typescript ClangFormatAutoEnable
 
+" Ctrl-P config
+" use silver searcher for listing files in ctrlp
+let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+" it's so fast we don't need a file cache
+let g:ctrlp_use_caching = 0
+
 " TypeScript config
 " Syntastic will handle error reporting (see below)
-let g:tsuquyomi_disable_quickfix = 1
+"let g:tsuquyomi_disable_quickfix = 1
 
 " Syntastic config
 let g:syntastic_html_checkers = []
 "let g:syntastic_html_htmlhint_args = "--rules doctype-first=false"
-let g:syntastic_typescript_checkers = ['tsuquyomi']
+"let g:syntastic_typescript_checkers = ['tsuquyomi']
+
+let g:syntastic_always_populate_loc_list = 1
+" Automatically open/close error window
+let g:syntastic_auto_loc_list = 1
+" Combine errors from different checkers
+let g:syntastic_aggregate_errors = 1
+" Check as soon as a file is opened
+let g:syntastic_check_on_open = 1
+" Skip checks when exiting
+let g:syntastic_check_on_wq = 0
+" Allow TypeScript decorators
+let g:syntastic_typescript_tsc_post_args='--experimentalDecorators'
+" There are lots of tools for checking go code
+let g:syntastic_go_checkers = ['go', 'gofmt', 'govet', 'golint']
 
 " Ctrl+P config
 let g:ctrlp_custom_ignore = {
@@ -141,3 +171,10 @@ autocmd BufEnter * EnableStripWhitespaceOnSave
 " Fully re-highlight file when necessary. This is supposedly slow, but it is
 " definitely more accurate
 autocmd BufEnter * :syntax sync fromstart
+
+" Some custom keymappings
+nmap <leader>n :NERDTreeToggle<CR>
+nmap <leader>m :NERDTreeFind<CR>
+nmap <leader>s :SyntasticCheck<CR>
+" search/replace word under cursor
+nmap <leader>z :%s/\<<C-r><C-w>\>//g<left><left>

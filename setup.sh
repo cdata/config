@@ -55,6 +55,7 @@ install_osx_base () {
   brew install nvm
   brew install python3
   brew install clang-format
+  brew install ag
   # Slow:
   #brew install bash-completion
 
@@ -79,7 +80,7 @@ install_debian_base () {
 
   sudo apt-get -yq update
   sudo apt-get -yq upgrade
-  sudo apt-get -yq install git build-essential openssh-server neovim tmux python3 python3-pip curl clang-format
+  sudo apt-get -yq install git build-essential openssh-server neovim tmux python3 python3-pip curl clang-format silversearcher-ag
 
   curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
 
