@@ -25,7 +25,7 @@ Plug 'airblade/vim-gitgutter'
 " JavaScript & TypeScript
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim' " syntax files
-Plug 'Quramy/vim-js-pretty-template'
+Plug 'cdata/vim-tagged-template'
 Plug 'Quramy/tsuquyomi'
 
 " HTML
@@ -104,22 +104,6 @@ set hls
 " Wrap text instead of being on one line
 set lbr
 
-" Special style config for clang-format
-let g:clang_format#style_options = {
-    \ "BasedOnStyle" : "Google",
-    \ "AlignAfterOpenBracket" : "AlwaysBreak",
-    \ "AllowAllParametersOfDeclarationOnNextLine" : "false",
-    \ "AllowShortBlocksOnASingleLine" : "false",
-    \ "AllowShortCaseLabelsOnASingleLine" : "false",
-    \ "AllowShortFunctionsOnASingleLine" : "None",
-    \ "AllowShortIfStatementsOnASingleLine" : "false",
-    \ "AllowShortLoopsOnASingleLine" : "false",
-    \ "BinPackArguments" : "false",
-    \ "BinPackParameters" : "false"}
-
-" Auto-enable clang-format for relevant filetypes
-autocmd FileType javascript,typescript ClangFormatAutoEnable
-
 " Ctrl-P config
 " use silver searcher for listing files in ctrlp
 let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
@@ -161,10 +145,30 @@ let mapleader=","
 " Deoplete config
 let g:deoplete#enable_at_startup = 1
 
-" Pretty template literals for html only
-call jspretmpl#register_tag('html', 'html')
+" Clang Format config
+" Special style config for clang-format
+let g:clang_format#style_options = {
+    \ "BasedOnStyle" : "Google",
+    \ "AlignAfterOpenBracket" : "AlwaysBreak",
+    \ "AllowAllParametersOfDeclarationOnNextLine" : "false",
+    \ "AllowShortBlocksOnASingleLine" : "false",
+    \ "AllowShortCaseLabelsOnASingleLine" : "false",
+    \ "AllowShortFunctionsOnASingleLine" : "None",
+    \ "AllowShortIfStatementsOnASingleLine" : "false",
+    \ "AllowShortLoopsOnASingleLine" : "false",
+    \ "BinPackArguments" : "false",
+    \ "BinPackParameters" : "false"}
 
-"autocmd FileType javascript,typescript JsPreTmpl javascript
+" Auto-enable clang-format for relevant filetypes
+autocmd FileType javascript,typescript ClangFormatAutoEnable
+
+" Tagged Template config
+let g:taggedtemplate#tagSyntaxMap = {
+  \ "html": "html",
+  \ "md": "markdown",
+  \ "css": "css" }
+
+autocmd FileType javascript,typescript : call taggedtemplate#applySyntaxMap()
 
 " Better Whitespace config
 autocmd BufEnter * EnableStripWhitespaceOnSave
