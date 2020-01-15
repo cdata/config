@@ -1,4 +1,4 @@
-#!/bin/bash
+eval "$(starship init bash)"
 
 export EDITOR=nvim
 
@@ -10,11 +10,7 @@ export NVM_DIR="$HOME/.nvm"
 #  /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh \
 
 source_files=( \
-  /usr/local/opt/git/etc/bash_completion.d/git-prompt.sh \
-  /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc \
-  /opt/homebrew-cask/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc \
-  /usr/local/git/current/share/git-core/git-completion.sh \
-  /usr/local/git/current/share/git-core/git-prompt.sh \
+  source /usr/share/bash-completion/completions/git \
   $HOME/.nvm_default
 )
 
@@ -36,34 +32,23 @@ for source_file in "${source_files[@]}"; do
 done
 
 export CDATA_REPOS="$HOME/repositories"
-export CDATA_CONFIG="$CDATA_REPOS/config"
-
-export REPOS_GOOGLE="$CDATA_REPOS/google"
-export REPOS_POLYMER_ELEMENTS="$REPOS_GOOGLE/polymerelements"
-export REPOS_POLYMER_LABS="$REPOS_GOOGLE/polymerlabs"
-export REPOS_POLYMER="$REPOS_GOOGLE/polymer"
-export REPOS_PERSONAL="$CDATA_REPOS/personal"
+export CDATA_CONFIG="$CDATA_REPOS/github.com/cdata/config"
 
 export GOPATH="$CDATA_REPOS/go"
 
 export PATH=$PATH:$HOME/.npm-packages/bin
-export PATH=$PATH:node_modules/.bin:$HOME/repositories/go/bin
+export PATH=$PATH:node_modules/.bin
+export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:$HOME/.homebrew/bin
 
-
 # Personal aliases
 alias cfg="cd $CDATA_CONFIG"
 
 alias repos="cd $CDATA_REPOS"
-alias pe="cd $REPOS_POLYMER_ELEMENTS"
-alias pl="cd $REPOS_POLYMER_LABS"
-alias p="cd $REPOS_POLYMER"
-alias g="cd $REPOS_GOOGLE"
 alias togo="cd $GOPATH"
-alias cdata="cd $REPOS_PERSONAL"
 
 alias vim='nvim'
 alias vi='nvim'
@@ -104,5 +89,6 @@ shopt -s checkwinsize
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 
-export PS1="\[\e[0;30m\] ᛝ \[\e[1;34m\]\u\[\e[0;30m\]@\[\e[1;30m\]\h\[\e[0;30m\]:\[\e[1;36m\]\W\[\e[1;32m\]\$(__git_ps1)\[\e[0;30m\] ᚦ \[\e[0m\]"
-
+# enable nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
