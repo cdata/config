@@ -8,15 +8,15 @@ call plug#begin()
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'morhetz/gruvbox'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"Plug 'Shougo/vimproc.vim', { 'do': 'make' }
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'scrooloose/nerdcommenter'
 Plug 'scrooloose/nerdtree'
-Plug 'vim-syntastic/syntastic'
+"Plug 'vim-syntastic/syntastic'
 Plug 'rhysd/vim-clang-format'
-Plug 'ervandew/supertab'
-Plug 'ryanoasis/vim-devicons'
+"Plug 'ervandew/supertab'
+"Plug 'ryanoasis/vim-devicons'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -25,8 +25,8 @@ Plug 'airblade/vim-gitgutter'
 " JavaScript & TypeScript
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim' " syntax files
-Plug 'cdata/vim-tagged-template'
-Plug 'Quramy/tsuquyomi'
+"Plug 'cdata/vim-tagged-template'
+"Plug 'Quramy/tsuquyomi'
 
 " HTML
 "Plug 'othree/html5.vim'
@@ -36,13 +36,13 @@ Plug 'Quramy/tsuquyomi'
 Plug 'ap/vim-css-color'
 
 " Go
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " Rust
-Plug 'rust-lang/rust.vim'
+"Plug 'rust-lang/rust.vim'
 
 " Misc
-Plug 'tomlion/vim-solidity'
+"Plug 'tomlion/vim-solidity'
 Plug 'tikhomirov/vim-glsl'
 
 call plug#end()

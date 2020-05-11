@@ -1,0 +1,17 @@
+{
+    "workbench.activityBar.visible": false,
+    "workbench.colorTheme": "Activate SCARLET protocol (beta)",
+    "editor.minimap.enabled": false,
+    "keyboard.dispatch": "keyCode",
+    "editor.tabSize": 2,
+    "editor.multiCursorModifier": "alt",
+    "editor.formatOnSave": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "window.titleBarStyle": "custom",
+    "window.zoomLevel": 0
+}
+

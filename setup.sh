@@ -5,11 +5,18 @@ clone () {
 
   echo "Cloning $repo to $destination..."
 
-  mkdir -p $destination
-
   set -e
-  git clone $repo $destination
+
+  if [[ ! -d $destination ]]; then
+    mkdir -p $destination
+    git clone $repo $destination
+  fi
+
   set +e
+}
+
+timestamp () {
+  date +"%T"
 }
 
 backup () {
@@ -17,7 +24,7 @@ backup () {
 
   if [[ -e $file ]]; then
     echo "Backing up $file..."
-    mv $file $file.backup
+    cp $file "$file.$(timestamp).backup"
   fi
 }
 
@@ -41,137 +48,149 @@ ensure_directory () {
 is_linux () { [[ "$OSTYPE" == *'linux'* ]]; }
 is_osx () { [[ "$OSTYPE" == *'darwin'* ]]; }
 
-install_osx_base () {
-  echo "Installing base packages for an OSX system..."
-
-  set -e
-
-  `which xcode-select` --install
-  `which ruby` -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-
-  brew install git
-  brew install tmux
-  brew install wget
-  brew install nvm
-  brew install python3
-  brew install clang-format
-  brew install ag
-  # Slow:
-  #brew install bash-completion
-
-  brew tap caskroom/fonts
-  brew cask install font-hack-nerd-font-mono
-
-  brew install caskroom/cask/iterm2
-  brew install neovim/neovim/neovim
-  brew install caskroom/cask/spectacle
-  brew install caskroom/cask/licecap
-  brew install caskroom/cask/flux
-  brew install caskroom/cask/keycastr
-  brew linkapps
-
-  set +e
-}
-
-install_debian_base () {
+install_debian_packages () {
   echo "Installing base packages for a Debian system..."
 
   set -e
 
-  sudo apt-get -yq update
-  sudo apt-get -yq upgrade
-  sudo apt-get -yq install git build-essential openssh-server neovim tmux python3 python3-pip curl clang-format silversearcher-ag
+  sudo apt -y update
+  sudo apt -y upgrade
+  sudo apt -y install \
+    git \
+    build-essential \
+    tmux \
+    curl \
+    wget \
+    neovim \
+    clang-format \
+    fonts-powerline \
+    software-properties-common \
+    silversearcher-ag
 
-  curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash
+  wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
+  sudo apt-add-repository 'deb https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/repos/debs/ vscodium main'
+  sudo apt update
+  sudo apt install codium
+
+  mkdir -p $HOME/Downloads
+
+  curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb > $HOME/Downloads/chrome.deb
+
+  sudo dpkg -i $HOME/Downloads/chrome.deb
+
+  curl -fsSL https://starship.rs/install.sh > $HOME/Downloads/install-starship.sh
+  sudo bash $HOME/Downloads/install-starship.sh -y
 
   set +e
 }
 
-install_common_base () {
-  echo "Installing base packages common to all systems..."
+setup_dot_files() {
+  echo "Setting up dot files..."
+
+  home=$HOME
+  repositories=$HOME/repositories
+  config=$repositories/github.com/cdata/config
 
   set -e
 
-  nvm install --lts
+  ensure_directory $repositories
+  ensure_directory $home/.ssh
+  ensure_directory $home/.config/nvim
 
-  npm install -g neovim
-  npm install -g typescript
+  clone https://github.com/cdata/config.git $config
 
-  pip3 install --upgrade neovim
+  backup $home/.bashrc
+  backup $home/.bash_profile
+  backup $home/.profile
+  backup $home/.bash_login
+
+  # Symlink dotfiles
+
+  bashrc=$config/bash/rc
+
+  symlink $bashrc $home/.bashrc
+  symlink $bashrc $home/.bash_profile
+
+  tmux_conf=$config/tmux/tmux.conf
+
+  symlink $tmux_conf $home/.tmux.conf
+
+  vscodium_settings_dir=$home/.config/VSCodium/User
+  vscodium_settings=$config/vscode/settings.json
+
+  ensure_directory $vscodium_settings_dir
+  symlink $vscodium_settings $vscodium_settings_dir/settings.json
+
+  neovim_init=$config/neovim/init.vim
+  neovim_init_dir=$home/.config/nvim
+
+  ensure_directory $neovim_init_dir
+  symlink $neovim_init $neovim_init_dir/init.vim
+
+  set +e
+}
+
+setup_dev_environment () {
+  echo "Setting up development environment..."
+
+  set -e
+
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
   git config --global user.name "Chris Joel"
   git config --global user.email "chris@scriptolo.gy"
 
+  # Install powerline fonts
+
+  font_install_dir=$HOME/.local/share/fonts
+  ensure_directory $font_install_dir
+  pushd $font_install_dir
+  wget https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaPL.ttf
+  popd
+
+  fc-cache -vf $font_install_dir
+
+  echo "Initializing VSCodium..."
+
+  code_extensions=(
+    "xaver.clang-format"
+    "max-ss.cyberpunk"
+    "dbaeumer.vscode-eslint"
+    "eamodio.gitlens"
+    "cesium.gltf-vscode"
+    "slevesque.shader"
+    "vscodevim.vim"
+  )
+
+  for extension in "${code_extensions[@]}"
+  do
+    codium --install-extension $extension
+  done
+
+  echo "Initializing neovim..."
+
+  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+  nvim +PlugInstall!
+
   set +e
 }
 
-home=$HOME
-repositories=$HOME/repositories
-config=$repositories/config
-vendor=$config/vendor
-
-set -e
-
-ensure_directory $repositories
-ensure_directory $home/.ssh
-ensure_directory $home/.config/nvim
-
-clone https://github.com/cdata/config.git $config
-
-ensure_directory $vendor
-
-clone https://github.com/gioele/bashrc_dispatch.git $vendor/bashrc_dispatch
-
-backup $home/.bashrc
-backup $home/.bash_profile
-backup $home/.profile
-backup $home/.bash_login
-
-# Symlink dotfiles
-
-bashrc_dispatch=$vendor/bashrc_dispatch/bashrc_dispatch
-bash=$config/bash
-
-symlink $bashrc_dispatch $home/.bashrc
-symlink $bashrc_dispatch $home/.bash_profile
-symlink $bashrc_dispatch $home/.profile
-symlink $bashrc_dispatch $home/.bash_login
-
-symlink $bash/rc_all $home/.bashrc_all
-symlink $bash/rc_interactive $home/.bashrc_interactive
-symlink $bash/rc_login $home/.bashrc_login
-symlink $bash/rc_script $home/.bashrc_script
-
-tmux=$config/tmux
-
-symlink $tmux/tmux.conf $home/.tmux.conf
-
-neovim=$config/neovim
-
-symlink $neovim/init.vim $home/.config/nvim/init.vim
-
-# Install important packages
-
 if is_osx; then
-  install_osx_base
+  echo "You changed how this file works but didn't update the OSX steps dummy"
+  exit 1
 fi
 
 if is_linux; then
-  install_debian_base
+  install_debian_packages
 fi
 
-install_common_base
-
-# Set up Neovim
-
-echo "Initializing neovim..."
-
-curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-nvim +PlugInstall!
+setup_dot_files
+setup_dev_environment
 
 echo "Done!"
 
 set +e
+
 
