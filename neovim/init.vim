@@ -168,7 +168,7 @@ let g:taggedtemplate#tagSyntaxMap = {
   \ "md": "markdown",
   \ "css": "css" }
 
-autocmd FileType javascript,typescript : call taggedtemplate#applySyntaxMap()
+" autocmd FileType javascript,typescript : call taggedtemplate#applySyntaxMap()
 
 " Better Whitespace config
 autocmd BufEnter * EnableStripWhitespaceOnSave
