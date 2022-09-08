@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 # Base16 - Gnome Terminal color scheme install script
-
 [[ -z "$PROFILE_NAME" ]] && PROFILE_NAME="Umbra Protocol"
 [[ -z "$PROFILE_SLUG" ]] && PROFILE_SLUG="umbra-protocol"
 [[ -z "$DCONF" ]] && DCONF=dconf

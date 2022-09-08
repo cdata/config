@@ -45,6 +45,8 @@ ensure_directory () {
   mkdir -p $directory
 }
 
+
+
 is_linux () { [[ "$OSTYPE" == *'linux'* ]]; }
 is_osx () { [[ "$OSTYPE" == *'darwin'* ]]; }
 
@@ -58,10 +60,14 @@ install_debian_packages () {
   sudo apt -y install \
     git \
     build-essential \
+    alacritty \
+    python-is-python3 \
     tmux \
     curl \
     wget \
     neovim \
+    htop \
+    gconf2 \
     clang-format \
     fonts-powerline \
     software-properties-common \
@@ -71,16 +77,17 @@ install_debian_packages () {
   echo 'deb [signed-by=/etc/apt/trusted.gpg.d/vscodium-archive-keyring.gpg] https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
 
   sudo apt update
-  sudo apt install codium
+  sudo apt install codium codium-insiders
 
   mkdir -p $HOME/Downloads
 
-  curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb > $HOME/Downloads/chrome.deb
+  if ! [ -x "$(command -v google-chrome)" ]; then
+    curl https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb > $HOME/Downloads/chrome.deb
+    sudo dpkg -i $HOME/Downloads/chrome.deb
+  fi
 
-  sudo dpkg -i $HOME/Downloads/chrome.deb
-
-  curl -fsSL https://starship.rs/install.sh > $HOME/Downloads/install-starship.sh
-  sudo bash $HOME/Downloads/install-starship.sh -y
+  # See: https://starship.rs/
+  curl -sS https://starship.rs/install.sh | sh
 
   set +e
 }
@@ -116,17 +123,56 @@ setup_dot_files() {
 
   symlink $tmux_conf $home/.tmux.conf
 
+  alacritty_conf=$config/alacritty/alacritty.yml
+
+  ensure_directory $home/.config/alacritty
+  symlink $alacritty_conf $home/.config/alacritty/alacritty.yml
+
   vscodium_settings_dir=$home/.config/VSCodium/User
   vscodium_settings=$config/vscode/settings.json
 
   ensure_directory $vscodium_settings_dir
   symlink $vscodium_settings $vscodium_settings_dir/settings.json
 
-  neovim_init=$config/neovim/init.vim
-  neovim_init_dir=$home/.config/nvim
+  # TODO: Re-evaluate what I want from a vim config
+  # neovim_init=$config/neovim/init.vim
+  # neovim_init_dir=$home/.config/nvim
 
-  ensure_directory $neovim_init_dir
-  symlink $neovim_init $neovim_init_dir/init.vim
+  # ensure_directory $neovim_init_dir
+  # symlink $neovim_init $neovim_init_dir/init.vim
+
+  set +e
+}
+
+setup_fonts () {
+  echo "Setting up fonts..."
+
+  set -e
+
+  font_install_dir=$HOME/.local/share/fonts
+  cascadia_code_version="2106.17"
+
+  # Delugia is Cascadia Code with Nerd Fonts
+  pushd /tmp
+  wget https://github.com/adam7/delugia-code/releases/download/v$cascadia_code_version/delugia-complete.zip
+  unzip ./delugia-complete.zip
+  ensure_directory $font_install_dir
+  cp -f ./delugia-complete/Delugia*.ttf $font_install_dir/
+  popd
+
+  # Cascadia Code doesn't currently support Nerd Fonts glyphs, but Nerd Fonts
+  # glyphs are required to get the most out of Starship
+  #pushd /tmp
+  #wget https://github.com/microsoft/cascadia-code/releases/download/v$cascadia_code_version/CascadiaCode-$cascadia_code_version.zip
+  #unzip ./CascadiaCode-$cascadia_code_version.zip
+  #popd
+
+  #ensure_directory $font_install_dir
+  #pushd $font_install_dir
+  #cp /tmp/ttf/Cascadia*.ttf ./
+  #popd
+
+  fc-cache -vf $font_install_dir
 
   set +e
 }
@@ -136,44 +182,49 @@ setup_dev_environment () {
 
   set -e
 
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+  if ! [ -x "$(command -v rustup)" ]; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+  fi
+
+  if ! [ -x "$(command -v nvm)" ]; then
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+  fi 
 
   git config --global user.name "Chris Joel"
-  git config --global user.email "chris@scriptolo.gy"
-
-  # Install powerline fonts
-
-  font_install_dir=$HOME/.local/share/fonts
-  ensure_directory $font_install_dir
-  pushd $font_install_dir
-  wget https://github.com/microsoft/cascadia-code/releases/latest/download/CascadiaPL.ttf
-  popd
-
-  fc-cache -vf $font_install_dir
+  git config --global user.email "0xcda7a@gmail.com"
+  git config --global init.defaultbranch "main"
+  git config --global commit.gpgsign true
+  git config --global user.signingkey "8D5E893F"
 
   echo "Initializing VSCodium..."
 
   code_extensions=(
-    "xaver.clang-format"
     "max-ss.cyberpunk"
     "dbaeumer.vscode-eslint"
     "eamodio.gitlens"
-    "cesium.gltf-vscode"
-    "slevesque.shader"
+    "esbenp.prettier-vscode"
+    "runem.lit-plugin"
+    "matklad.rust-analyzer"
     "vscodevim.vim"
+    "bungcip.better-toml"
+    "serayuzgur.crates"
+    "antyos.openscad"
+    #"dtsvet.vscode-wasm"
+    "vadimcn.vscode-lldb"
   )
+
+  # TODO: Setup Dracula Pro
+
 
   for extension in "${code_extensions[@]}"
   do
     codium --install-extension $extension
   done
 
-  echo "Initializing neovim..."
-
-  curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
-  nvim +PlugInstall!
+  # echo "Initializing neovim..."
+  # curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+  #    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  # nvim +PlugInstall!
 
   set +e
 }
@@ -188,6 +239,7 @@ if is_linux; then
 fi
 
 setup_dot_files
+setup_fonts
 setup_dev_environment
 
 echo "Done!"

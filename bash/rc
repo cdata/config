@@ -92,3 +92,11 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 # enable nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Deprecated domain-specific stuff...
+#export PATH="$HOME/.radicle/bin:$PATH"
+#export PATH="/home/cdata/repositories/github.com/emscripten-core/emsdk:/home/cdata/repositories/github.com/emscripten-core/emsdk/node/14.15.5_64bit/bin:/home/cdata/repositories/github.com/emscripten-core/emsdk/upstream/emscripten:$PATH"
+#export PATH="/home/cdata/repositories/storage.googleapis.com/fuchsia/.jiri_root/bin:$PATH"
+#source /home/cdata/repositories/storage.googleapis.com/fuchsia/scripts/fx-env.sh
+
+. "$HOME/.cargo/env"

@@ -1,17 +1,33 @@
 {
-    "workbench.activityBar.visible": false,
-    "workbench.colorTheme": "Activate SCARLET protocol (beta)",
-    "editor.minimap.enabled": false,
-    "keyboard.dispatch": "keyCode",
-    "editor.tabSize": 2,
-    "editor.multiCursorModifier": "alt",
-    "editor.formatOnSave": true,
-    "[typescript]": {
-        "editor.defaultFormatter": "xaver.clang-format"
-    },
-    "javascript.updateImportsOnFileMove.enabled": "always",
-    "typescript.updateImportsOnFileMove.enabled": "always",
-    "window.titleBarStyle": "custom",
-    "window.zoomLevel": 0
+  "workbench.activityBar.visible": false,
+  "workbench.colorTheme": "Dracula Pro (Van Helsing)",
+  "editor.minimap.enabled": false,
+  "keyboard.dispatch": "keyCode",
+  "editor.tabSize": 2,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "window.titleBarStyle": "custom",
+  "prettier.singleQuote": true,
+  "editor.fontWeight": "300",
+  "editor.fontFamily": "'Cascadia Code PL', 'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback'",
+  "editor.fontSize": 14.5,
+  "rust-analyzer.procMacro.enable": true,
+  "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+  "rust-analyzer.cargo.allFeatures": false,
+  "rust-analyzer.experimental.procAttrMacros": true,
+  "rust-analyzer.inlayHints.enable": true,
+  "workbench.editor.untitled.hint": "hidden",
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+  "wgsl-analyzer.server.path": "~/.cargo/bin/wgsl_analyzer",
+  "wgsl-analyzer.trace.server": true,
+  "rust-analyzer.lruCapacity": 256,
+  "rust-analyzer.trace.extension": true,
+  "debug.allowBreakpointsEverywhere": true
 }
-
