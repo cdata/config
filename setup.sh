@@ -77,7 +77,7 @@ install_debian_packages () {
   echo 'deb [signed-by=/etc/apt/trusted.gpg.d/vscodium-archive-keyring.gpg] https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
 
   sudo apt update
-  sudo apt install codium codium-insiders
+  sudo apt install codium
 
   mkdir -p $HOME/Downloads
 
@@ -86,8 +86,17 @@ install_debian_packages () {
     sudo dpkg -i $HOME/Downloads/chrome.deb
   fi
 
-  # See: https://starship.rs/
-  curl -sS https://starship.rs/install.sh | sh
+  if ! [ -x "$(command -v tailscale)" ]; then
+    # See: https://tailscale.com/download/linux
+    curl -fsSL https://tailscale.com/install.sh | sh
+    echo "Starting up Tailscale; you will probably need to manually authenticate..."
+    sudo tailscale up
+  fi
+
+  if ! [ -x "$(command -v starship)" ]; then
+    # See: https://starship.rs/
+    curl -sS https://starship.rs/install.sh | sh
+  fi
 
   set +e
 }
@@ -150,13 +159,14 @@ setup_fonts () {
   set -e
 
   font_install_dir=$HOME/.local/share/fonts
-  cascadia_code_version="2106.17"
+  cascadia_code_version="2111.01"
 
   # Delugia is Cascadia Code with Nerd Fonts
   pushd /tmp
   wget https://github.com/adam7/delugia-code/releases/download/v$cascadia_code_version/delugia-complete.zip
   unzip ./delugia-complete.zip
   ensure_directory $font_install_dir
+  rm -f $font_install_dir/Delugia*.ttf
   cp -f ./delugia-complete/Delugia*.ttf $font_install_dir/
   popd
 
